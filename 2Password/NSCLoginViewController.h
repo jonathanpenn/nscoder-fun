@@ -1,5 +1,5 @@
 //
-//  NSCAppDelegate.h
+//  NSCLoginViewController.h
 //  2Password
 //
 //  Created by Jonathan on 4/2/13.
@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NSCAppDelegate : UIResponder <UIApplicationDelegate>
+@interface NSCLoginViewController : UIViewController
 
-@property (strong, nonatomic) UIWindow *window;
++ (instancetype)controllerFromStoryboard:(UIStoryboard *)storyboard;
 
 @end

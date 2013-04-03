@@ -10,7 +10,6 @@
 		AB68591D170B99E900976BEB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB68591C170B99E900976BEB /* UIKit.framework */; };
 		AB68591F170B99E900976BEB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB68591E170B99E900976BEB /* Foundation.framework */; };
 		AB685921170B99E900976BEB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB685920170B99E900976BEB /* CoreGraphics.framework */; };
-		AB685923170B99E900976BEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB685922170B99E900976BEB /* CoreData.framework */; };
 		AB685929170B99E900976BEB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AB685927170B99E900976BEB /* InfoPlist.strings */; };
 		AB68592B170B99E900976BEB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB68592A170B99E900976BEB /* main.m */; };
 		AB68592F170B99E900976BEB /* NSCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB68592E170B99E900976BEB /* NSCAppDelegate.m */; };
@@ -27,6 +26,9 @@
 		AB685958170B9A0D00976BEB /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB685957170B9A0D00976BEB /* Storyboard.storyboard */; };
 		AB68595B170B9A5800976BEB /* NSCPasswordDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AB68595A170B9A5800976BEB /* NSCPasswordDocument.m */; };
 		AB68595E170B9CDA00976BEB /* NSCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB68595D170B9CDA00976BEB /* NSCLoginViewController.m */; };
+		AB685960170BA12A00976BEB /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB68595F170BA12A00976BEB /* CoreMotion.framework */; };
+		AB685963170BA5A700976BEB /* NSCPasswordListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB685962170BA5A700976BEB /* NSCPasswordListViewController.m */; };
+		AB685965170BB1A900976BEB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB685964170BB1A900976BEB /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,10 @@
 		AB68595A170B9A5800976BEB /* NSCPasswordDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCPasswordDocument.m; sourceTree = "<group>"; };
 		AB68595C170B9CDA00976BEB /* NSCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCLoginViewController.h; sourceTree = "<group>"; };
 		AB68595D170B9CDA00976BEB /* NSCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCLoginViewController.m; sourceTree = "<group>"; };
+		AB68595F170BA12A00976BEB /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		AB685961170BA5A700976BEB /* NSCPasswordListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCPasswordListViewController.h; sourceTree = "<group>"; };
+		AB685962170BA5A700976BEB /* NSCPasswordListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCPasswordListViewController.m; sourceTree = "<group>"; };
+		AB685964170BB1A900976BEB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,10 +79,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB685965170BB1A900976BEB /* Security.framework in Frameworks */,
+				AB685960170BA12A00976BEB /* CoreMotion.framework in Frameworks */,
 				AB68591D170B99E900976BEB /* UIKit.framework in Frameworks */,
 				AB68591F170B99E900976BEB /* Foundation.framework in Frameworks */,
 				AB685921170B99E900976BEB /* CoreGraphics.framework in Frameworks */,
-				AB685923170B99E900976BEB /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +104,8 @@
 		AB685910170B99E900976BEB = {
 			isa = PBXGroup;
 			children = (
+				AB685964170BB1A900976BEB /* Security.framework */,
+				AB68595F170BA12A00976BEB /* CoreMotion.framework */,
 				AB685924170B99E900976BEB /* 2Password */,
 				AB685946170B99E900976BEB /* 2PasswordTests */,
 				AB68591B170B99E900976BEB /* Frameworks */,
@@ -135,6 +144,8 @@
 				AB685957170B9A0D00976BEB /* Storyboard.storyboard */,
 				AB68595C170B9CDA00976BEB /* NSCLoginViewController.h */,
 				AB68595D170B9CDA00976BEB /* NSCLoginViewController.m */,
+				AB685961170BA5A700976BEB /* NSCPasswordListViewController.h */,
+				AB685962170BA5A700976BEB /* NSCPasswordListViewController.m */,
 				AB685936170B99E900976BEB /* _Password.xcdatamodeld */,
 				AB685925170B99E900976BEB /* Supporting Files */,
 			);
@@ -290,6 +301,7 @@
 				AB685938170B99E900976BEB /* _Password.xcdatamodeld in Sources */,
 				AB68595B170B9A5800976BEB /* NSCPasswordDocument.m in Sources */,
 				AB68595E170B9CDA00976BEB /* NSCLoginViewController.m in Sources */,
+				AB685963170BA5A700976BEB /* NSCPasswordListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

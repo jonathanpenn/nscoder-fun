@@ -7,88 +7,108 @@
 //
 
 #import "NSCPasswordDocument.h"
+#import <Security/Security.h>
 
 @interface NSCPasswordDocument ()
 
-@property (readwrite, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readwrite, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readwrite, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong) NSMutableArray *passwords;
 
 @end
 
 @implementation NSCPasswordDocument
 
-- (void)saveContext
+- (NSArray *)items
 {
-    NSError *error = nil;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    if (managedObjectContext != nil) {
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        } 
+    return self.passwords;
+}
+
+- (NSMutableArray *)passwords
+{
+    if (!_passwords) {
+        NSDictionary *dict = @{
+           (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+           (__bridge id)kSecAttrService: @"our.app.stuff",
+           (__bridge id)kSecAttrAccount: @"ourPasswords",
+           (__bridge id)kSecReturnData: (__bridge id)kCFBooleanTrue,
+           (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlocked
+        };
+
+        CFDataRef refData;
+        OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)dict, (CFTypeRef *)&refData);
+        NSData *passDat = (__bridge_transfer NSData *)refData;
+
+        if (passDat == nil) {
+            _passwords = [NSMutableArray array];
+        } else {
+            _passwords = [NSKeyedUnarchiver unarchiveObjectWithData:passDat];
+        }
+
+        if (status != 0) {
+            NSLog(@"Houston we have a problem: %ld", status);
+        }
+    }
+
+    return _passwords;
+}
+
+- (void)writePasswords
+{
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.passwords];
+
+    NSDictionary *dict = @{
+       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+       (__bridge id)kSecAttrService: @"our.app.stuff",
+       (__bridge id)kSecAttrAccount: @"ourPasswords",
+       (__bridge id)kSecValueData: data,
+       (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlocked
+    };
+
+    OSStatus status = SecItemAdd((__bridge CFDictionaryRef)dict, NULL);
+
+    if (status != 0) {
+        NSLog(@"Houston we have a problem: %ld", status);
     }
 }
 
-#pragma mark - Core Data stack
-
-// Returns the managed object context for the application.
-// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
-- (NSManagedObjectContext *)managedObjectContext
+- (void)addPassword:(NSCPassword *)password
 {
-    if (_managedObjectContext != nil) {
-        return _managedObjectContext;
-    }
-    
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-    }
-    return _managedObjectContext;
+    [self.passwords addObject:password];
+    [self writePasswords];
 }
 
-// Returns the managed object model for the application.
-// If the model doesn't already exist, it is created from the application's model.
-- (NSManagedObjectModel *)managedObjectModel
+- (void)removePasswordAtIndex:(NSUInteger)index
 {
-    if (_managedObjectModel != nil) {
-        return _managedObjectModel;
+    [self.passwords removeObjectAtIndex:index];
+    [self writePasswords];
+}
+
+@end
+
+
+@implementation NSCPassword
+
++ (instancetype)passwordWithUsername:(NSString *)username password:(NSString *)password
+{
+    NSCPassword *p = [[NSCPassword alloc] init];
+    p.username = username;
+    p.password = password;
+    return p;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self) {
+        _username = [aDecoder valueForKey:@"username"];
+        _password = [aDecoder valueForKey:@"password"];
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"_Password" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return _managedObjectModel;
+    return self;
 }
 
-// Returns the persistent store coordinator for the application.
-// If the coordinator doesn't already exist, it is created and the application's store added to it.
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+- (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    if (_persistentStoreCoordinator != nil) {
-        return _persistentStoreCoordinator;
-    }
-    
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"_Password.sqlite"];
-    
-    NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }    
-    
-    return _persistentStoreCoordinator;
+    [aCoder setValue:self.username forKey:@"username"];
+    [aCoder setValue:self.password forKey:@"password"];
 }
-
-#pragma mark - Application's Documents directory
-
-// Returns the URL to the application's Documents directory.
-- (NSURL *)applicationDocumentsDirectory
-{
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
-
 
 @end

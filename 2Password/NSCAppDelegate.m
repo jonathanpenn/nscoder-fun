@@ -31,12 +31,6 @@
     [self presentLoginViewController];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Saves changes in the application's managed object context before the application terminates.
-    [self.document saveContext];
-}
-
 - (void)presentLoginViewController
 {
     NSCLoginViewController *controller = [NSCLoginViewController controllerFromStoryboard:self.window.rootViewController.storyboard];

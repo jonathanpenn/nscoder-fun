@@ -7,15 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+
+@interface NSCPassword : NSObject
+<NSCoding>
+
+@property (nonatomic, strong) NSString *username;
+@property (nonatomic, strong) NSString *password;
+
++ (instancetype)passwordWithUsername:(NSString *)username password:(NSString *)password;
+
+@end
 
 @interface NSCPasswordDocument : NSObject
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readonly, nonatomic, strong) NSArray *items;
 
-- (void)saveContext;
-- (NSURL *)applicationDocumentsDirectory;
+- (void)addPassword:(NSCPassword *)password;
+- (void)removePasswordAtIndex:(NSUInteger)index;
 
 @end
